@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Clipador - conectando o TikTok</title>
+<style>body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:0 auto;padding:48px 16px;color:#1d1d1f;background:#fff;text-align:center}a{color:#b0257d}</style>
+</head>
+<body>
+<h1>Conectando o TikTok ao Clipador…</h1>
+<p id="msg">Voltando para o Clipador neste computador.</p>
+<p><a id="go" href="#">Clique aqui se nada acontecer</a></p>
+<script>
+  // TikTok only accepts https redirect URIs; Clipador runs locally. This page forwards the
+  // authorization response (code + state) to the local app, unchanged. The code is useless
+  // without the app secret and the PKCE verifier, which never leave the operator's computer.
+  (function () {
+    var params = window.location.search || "";
+    var port = "8000";
+    try { port = localStorage.getItem("clipador-port") || port; } catch (e) {}
+    var target = "http://localhost:" + port + "/publicar/tiktok/callback" + params;
+    document.getElementById("go").href = target;
+    if (params) { window.location.replace(target); }
+    else { document.getElementById("msg").textContent = "Nenhum código recebido do TikTok."; }
+  })();
+</script>
+</body>
+</html>
